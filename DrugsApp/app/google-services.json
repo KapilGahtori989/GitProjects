@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "793705367980",
+    "project_id": "drugsapp-61dfe",
+    "storage_bucket": "drugsapp-61dfe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:793705367980:android:adf0321b945e297fb9d209",
+        "android_client_info": {
+          "package_name": "com.example.drugsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "793705367980-jbqo18cql0g40n6q3odsikl0c0gnulgb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.drugsapp",
+            "certificate_hash": "61d57327efa8108af0c649fe58b34a1602eb0b80"
+          }
+        },
+        {
+          "client_id": "793705367980-leqmfvefmsi3aesnajbcp8mhqjk875l3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrMIs3f6mPd5EIZ4dHuAKYkkqyhcwMpkY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "793705367980-leqmfvefmsi3aesnajbcp8mhqjk875l3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

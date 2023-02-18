@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Albums</string>
+    <string name="permission_required">Storage access is required to get access of image files</string>
+    <string name="permission_requiredC">Camera access is required to get access to camera</string>
+    <string name="ok">OK</string>
+    <string name="permission_granted">Permission is granted.</string>
+</resources>
