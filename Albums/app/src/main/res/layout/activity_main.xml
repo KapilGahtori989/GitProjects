@@ -12,7 +12,6 @@
       android:layout_height="wrap_content"
       android:id="@+id/recycler_view"
       tools:listitem="@layout/grid_view"
-      android:layout_margin="2dp"
       />
 
 

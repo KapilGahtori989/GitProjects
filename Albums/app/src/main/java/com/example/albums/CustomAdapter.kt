@@ -6,11 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import java.io.File
 
 
@@ -18,23 +16,25 @@ class CustomAdapter(private var data: ArrayList<File>, private val context: Cont
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val img: ImageView
+        val img: ImageView
 
         init {
             img = itemView.findViewById(R.id.icon)
+
         }
 
         fun bind(position: Int) {
 
 
-            Glide.with(context).load(data[position]).diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true).into(img)
+            Glide.with(context).load(data[position]).into(img)
+
+            //can use
+            //Glide.with(context).load(data[position]).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(img)
+            //For removing cache everytime from app
 
             img.setOnClickListener {
                 val intent  = Intent(context,ImageShow::class.java)
                 intent.putExtra("key",data[position].path)
-
-                Toast.makeText(context, data[position].path, Toast.LENGTH_SHORT).show()
                 startActivity(context,intent,null)
             }
         }
@@ -51,5 +51,17 @@ class CustomAdapter(private var data: ArrayList<File>, private val context: Cont
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(position)
+
+        // Get the screen width in pixels
+        val displayMetrics = context.resources.displayMetrics
+        val screenWidthPx = displayMetrics.widthPixels
+
+        // Calculate the item width based on the screen width and the number of columns you want to display
+        val numColumns = 4 // Replace this with the number of columns you want to display
+        val itemWidthPx = screenWidthPx / numColumns
+
+        // Set the item width to the ImageView
+        holder.img.layoutParams.width = itemWidthPx
+        holder.img.layoutParams.height = itemWidthPx
     }
 }
