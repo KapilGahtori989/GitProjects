@@ -16,7 +16,4 @@
             android:layout_gravity="center_horizontal"
             tools:src="@mipmap/ic_launcher"
             />
-
-
-
 </LinearLayout>

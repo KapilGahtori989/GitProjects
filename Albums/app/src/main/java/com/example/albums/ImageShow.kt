@@ -21,8 +21,6 @@ import com.jsibbold.zoomage.ZoomageView
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-
-
 class ImageShow : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

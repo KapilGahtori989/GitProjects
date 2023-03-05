@@ -129,7 +129,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         binding.recyclerView.layoutManager = GridLayoutManager(this, 4)
         binding.recyclerView.adapter = CustomAdapter(jpgFiles, this)
     }
