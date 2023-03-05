@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.albums.databinding.ActivityMainBinding
 import java.io.File
 
@@ -92,7 +93,6 @@ class MainActivity : AppCompatActivity() {
 
     //----------------------------------------------------------------------------------------------
     private lateinit var binding: ActivityMainBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -103,6 +103,12 @@ class MainActivity : AppCompatActivity() {
         givingPermissionStorage()
         givingCameraPermission()
 
+        //refreshing Activity
+        val swipeRefreshLayout =findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
+        swipeRefreshLayout.setOnRefreshListener {
+            finish()
+            startActivity(intent)
+        }
 
         // Obtain the internal storage directory
         val storageDir = Environment.getExternalStorageDirectory()
@@ -122,6 +128,8 @@ class MainActivity : AppCompatActivity() {
                 else -> 0
             }
         }
+
+
         binding.recyclerView.layoutManager = GridLayoutManager(this, 4)
         binding.recyclerView.adapter = CustomAdapter(jpgFiles, this)
     }
