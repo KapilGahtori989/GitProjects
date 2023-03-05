@@ -33,9 +33,9 @@ class CustomAdapter(private var data: ArrayList<File>, private val context: Cont
             //For removing cache everytime from app
 
             img.setOnClickListener {
-                val intent  = Intent(context,ImageShow::class.java)
-                intent.putExtra("key",data[position].path)
-                startActivity(context,intent,null)
+                val intent = Intent(context, ImageShow::class.java)
+                intent.putExtra("key", data[position].path)
+                startActivity(context, intent, null)
             }
         }
     }

@@ -2,13 +2,11 @@ package com.example.albums
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -89,47 +87,12 @@ class MainActivity : AppCompatActivity() {
                 )
 
             }
-
         }
     }
-
-    @RequiresApi(Build.VERSION_CODES.R)
-    private fun givingManagePermissionStorage() {
-
-        when {
-            ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.MANAGE_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED -> {
-               // Toast.makeText(this, R.string.permission_granted, Toast.LENGTH_LONG).show()
-            }
-
-
-            ActivityCompat.shouldShowRequestPermissionRationale(
-                this,
-                android.Manifest.permission.MANAGE_EXTERNAL_STORAGE
-            ) -> {
-                Toast.makeText(this, R.string.permission_required, Toast.LENGTH_LONG).show()
-                requestPermissionLauncher.launch(
-                    android.Manifest.permission.MANAGE_EXTERNAL_STORAGE
-                )
-            }
-
-            else -> {
-                requestPermissionLauncher.launch(
-                    android.Manifest.permission.MANAGE_EXTERNAL_STORAGE
-                )
-            }
-        }
-    }
-
-
 
     //----------------------------------------------------------------------------------------------
-
-
     private lateinit var binding: ActivityMainBinding
-    @RequiresApi(Build.VERSION_CODES.R)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -138,7 +101,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         givingPermissionStorage()
-        givingManagePermissionStorage()
         givingCameraPermission()
 
 
@@ -146,12 +108,12 @@ class MainActivity : AppCompatActivity() {
         val storageDir = Environment.getExternalStorageDirectory()
 
         // Obtain the folder containing the JPG files
-        val picturesDir = File(storageDir, "DCIM/Camera")
+        val picturesDir = File(storageDir, "")
 
         // Create an ArrayList to store the JPG files
         val jpgFiles = ArrayList<File>()
 
-        searchImageFile(picturesDir,jpgFiles)
+        searchImageFile(picturesDir, jpgFiles)
         //sorting photos to get sorted images i.e last clicked first
         jpgFiles.sortWith { file1, file2 ->
             when {
@@ -160,25 +122,24 @@ class MainActivity : AppCompatActivity() {
                 else -> 0
             }
         }
-
-
         binding.recyclerView.layoutManager = GridLayoutManager(this, 4)
         binding.recyclerView.adapter = CustomAdapter(jpgFiles, this)
     }
 
-     private fun searchImageFile(directory:File, data:ArrayList<File>){
+    private fun searchImageFile(directory: File, data: ArrayList<File>) {
         directory.listFiles()?.forEach { file ->
             if (file.isDirectory) {
                 // If the file is a directory, recursively search for music files in it
-                searchImageFile(file,data)
-            } else if (file.isFile && (file.name.endsWith(".jpg") || file.name.endsWith(".jpeg")|| file.name.endsWith(".png"))) {
+                searchImageFile(file, data)
+            } else if (file.isFile && (file.name.endsWith(".jpg") || file.name.endsWith(".jpeg") || file.name.endsWith(
+                    ".png"
+                ))
+            ) {
                 // If the file is a music file, add it to the ArrayList
                 data.add(file)
             }
         }
     }
-
-
 }
 
 

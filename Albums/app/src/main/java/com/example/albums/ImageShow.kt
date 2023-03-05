@@ -29,7 +29,7 @@ class ImageShow : AppCompatActivity() {
         setContentView(R.layout.activity_image_show)
 
         val img = findViewById<ZoomageView>(R.id.image_view_image_show)
-        val sh =findViewById<CardView>(R.id.share)
+        val sh = findViewById<CardView>(R.id.share)
         val ca = findViewById<CardView>(R.id.camera_animation)
         val da = findViewById<CardView>(R.id.delete)
         val file = intent.getStringExtra("key")
@@ -38,26 +38,26 @@ class ImageShow : AppCompatActivity() {
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .skipMemoryCache(true).into(img)
 
-            sh.setOnClickListener{
-                val lottie = findViewById<LottieAnimationView>(R.id.animation)
-                lottie.playAnimation() // Play the Lottie animation
+        sh.setOnClickListener {
+            val lottie = findViewById<LottieAnimationView>(R.id.animation)
+            lottie.playAnimation() // Play the Lottie animation
 
-                Handler(Looper.getMainLooper()).postDelayed({
-                    if (file != null) {
-                        openingShare(file,this)
-                    }
-                }, lottie.duration) // Delay the function call until the animation is finished
-            }
-
-        ca.setOnClickListener{
-           openCamera()
+            Handler(Looper.getMainLooper()).postDelayed({
+                if (file != null) {
+                    openingShare(file, this)
+                }
+            }, lottie.duration) // Delay the function call until the animation is finished
         }
-        da.setOnClickListener{
+
+        ca.setOnClickListener {
+            openCamera()
+        }
+        da.setOnClickListener {
             showDeleteConfirmationDialog(file!!)
         }
     }
 
-    private fun showDeleteConfirmationDialog(filePath:String) {
+    private fun showDeleteConfirmationDialog(filePath: String) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Delete file")
             .setMessage("Are you sure you want to permanently delete this file?")
@@ -79,27 +79,33 @@ class ImageShow : AppCompatActivity() {
         if (success) {
             Toast.makeText(this, "File deleted successfully", Toast.LENGTH_SHORT).show()
             // refresh the activity
-            val intent = Intent(this,MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             finish()
             startActivity(intent)
         } else {
-            Toast.makeText(this, "Failed to delete file", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "Failed to delete file \n ManageAllFiles permission needed",
+                Toast.LENGTH_SHORT
+            ).show()
         }
-
     }
 
     private val takePictureLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()) { result ->
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
         if (result.resultCode == RESULT_OK) {
             // Handle the result of the picture taking here
-            Toast.makeText(this,"captured....",Toast.LENGTH_LONG).show()
-            val intent = Intent(this,MainActivity::class.java)
+            Toast.makeText(this, "captured....", Toast.LENGTH_LONG).show()
+            val intent = Intent(this, MainActivity::class.java)
             finish()
             startActivity(intent)
         }
     }
+
     private fun openCamera() {
-        val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + "/Camera")
+        val storageDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + "/Camera")
         storageDir.mkdirs()
 
         // Create a unique filename for the captured image
@@ -108,7 +114,10 @@ class ImageShow : AppCompatActivity() {
 
         // Create an intent to capture a photo and save it to the specified file
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.albums.provider", imageFile))
+        intent.putExtra(
+            MediaStore.EXTRA_OUTPUT,
+            FileProvider.getUriForFile(this, "com.example.albums.provider", imageFile)
+        )
 
         try {
             takePictureLauncher.launch(intent)
@@ -118,7 +127,7 @@ class ImageShow : AppCompatActivity() {
     }
 
 
-    private fun openingShare(filePath: String,context:Context) {
+    private fun openingShare(filePath: String, context: Context) {
         val imageFile = File(filePath)
         val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", imageFile)
 
