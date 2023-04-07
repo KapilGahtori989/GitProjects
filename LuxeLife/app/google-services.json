@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "199014316590",
+    "project_id": "luxelife-dc121",
+    "storage_bucket": "luxelife-dc121.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199014316590:android:98c63ac142287e16ab3dbf",
+        "android_client_info": {
+          "package_name": "com.example.luxelife"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "199014316590-o2rsuf9s7li2jkohbqoohqd0ogn0cell.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArl0a63WegL7lyPUl9gBjLjrO8igyAcrg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "199014316590-o2rsuf9s7li2jkohbqoohqd0ogn0cell.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
