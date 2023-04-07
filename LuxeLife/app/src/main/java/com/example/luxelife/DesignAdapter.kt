@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -18,7 +20,7 @@ class DesignAdapter(c: Context) : RecyclerView.Adapter<DesignAdapter.ViewHolder>
     private lateinit var dbRef: DatabaseReference
     private lateinit var c: Context
     private var buttonClickListener: OnButtonClickListener? = null
-    private var itemClickListener:OnItemClickListener?=null
+    private var itemClickListener: OnItemClickListener? = null
 
 //--------------------------------------------------------------------------------------------------
 
@@ -26,7 +28,7 @@ class DesignAdapter(c: Context) : RecyclerView.Adapter<DesignAdapter.ViewHolder>
         buttonClickListener = listener
     }
 
-    fun setOnItemClickListener(listener:OnItemClickListener){
+    fun setOnItemClickListener(listener: OnItemClickListener) {
         itemClickListener = listener
     }
 
@@ -59,7 +61,8 @@ class DesignAdapter(c: Context) : RecyclerView.Adapter<DesignAdapter.ViewHolder>
         var note: TextView = itemView.findViewById(R.id.edit_Text)
         var delete: ImageView = itemView.findViewById(R.id.delete_note)
         var update: ImageView = itemView.findViewById(R.id.edit_note)
-        var text:TextView =itemView.findViewById(R.id.edit_Text)
+        var text: TextView = itemView.findViewById(R.id.edit_Text)
+        var scrollView: ScrollView = itemView.findViewById(R.id.scroll_View)
 
         @OptIn(DelicateCoroutinesApi::class)
         fun deleteRecord(position: Int) {
@@ -80,6 +83,7 @@ class DesignAdapter(c: Context) : RecyclerView.Adapter<DesignAdapter.ViewHolder>
                     ).show()
                 }
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -92,6 +96,7 @@ class DesignAdapter(c: Context) : RecyclerView.Adapter<DesignAdapter.ViewHolder>
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         holder.note.text = itemList[position].Note
         holder.delete.setOnClickListener {
             AlertDialog.Builder(holder.itemView.context)
@@ -113,8 +118,8 @@ class DesignAdapter(c: Context) : RecyclerView.Adapter<DesignAdapter.ViewHolder>
         }
     }
 
-    interface OnItemClickListener{
-        fun onItemClicked(note:String)
+    interface OnItemClickListener {
+        fun onItemClicked(note: String)
     }
 
     interface OnButtonClickListener {

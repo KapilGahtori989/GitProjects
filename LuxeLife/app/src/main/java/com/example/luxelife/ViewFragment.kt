@@ -8,11 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import java.util.zip.Inflater
 
 class ViewFragment:Fragment() {
-    private lateinit var editText: EditText
+    private lateinit var text: TextView
     private lateinit var originalText: String
 
     override fun onCreateView(
@@ -20,16 +21,15 @@ class ViewFragment:Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.blurred_fragment_design,container,false)
+        return inflater.inflate(R.layout.new_fragment,container,false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        editText = view.findViewById(R.id.edit_Text_input)
-        editText.inputType = InputType.TYPE_NULL // set the inputType to null
-        editText.setTextIsSelectable(true) // allow the text to be selected
+        text = view.findViewById(R.id.edit_Text_input)
+        text.setTextIsSelectable(true) // allow the text to be selected
         originalText = arguments?.getString("note") ?: ""
-        editText.setText(originalText)
+        text.text = originalText
 
         val button = view.findViewById<Button>(R.id.button_ok)
         button.setOnClickListener {
