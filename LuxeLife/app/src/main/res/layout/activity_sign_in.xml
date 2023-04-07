@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background_sign_in"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/welcome1"
-    android:id="@+id/background_sign_in"
     android:orientation="vertical"
     tools:context=".SignInActivity">
 
@@ -14,21 +14,20 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:boxStrokeColor="@color/yellow"
-        app:hintTextColor="@color/yellow"
         android:layout_marginStart="12dp"
         android:layout_marginTop="300dp"
         android:layout_marginEnd="12dp"
         android:textColorHint="@color/yellow"
-        >
+        app:boxStrokeColor="@color/yellow"
+        app:hintTextColor="@color/yellow">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/EmailEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/type_your_email"
-            android:textColor="@color/black"
             android:inputType="textEmailAddress"
-            />
+            android:textColor="@color/yellow" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -40,22 +39,21 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:textColorHint="@color/yellow"
         app:boxStrokeColor="@color/yellow"
         app:hintTextColor="@color/yellow"
-        android:layout_marginEnd="12dp"
         app:passwordToggleEnabled="true"
-        app:passwordToggleTintMode="src_atop"
-        android:textColorHint="@color/yellow"
-        app:passwordToggleTint="@color/black"
-        >
+        app:passwordToggleTint="@color/yellow"
+        app:passwordToggleTintMode="src_atop">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/PasswordEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/type_the_password"
             android:inputType="textPassword"
-            android:textColor="@color/black"
-            />
+            android:textColor="@color/yellow" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton

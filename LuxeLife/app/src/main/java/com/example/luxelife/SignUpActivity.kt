@@ -87,10 +87,11 @@ class SignUpActivity : AppCompatActivity() {
     private fun changingTheme(currentNightMode: Int) {
         if (currentNightMode == Configuration.UI_MODE_NIGHT_NO) {
             // Light mode
-            binding.backgroundRegister.setBackgroundResource(R.drawable.registerdark)
-            binding.textView.setTextColor(ContextCompat.getColor(this, R.color.yellow))
+
         } else {
             // Dark mode
+            binding.backgroundRegister.setBackgroundResource(R.drawable.registerdark)
+            binding.textView.setTextColor(ContextCompat.getColor(this, R.color.yellow))
         }
     }
 }

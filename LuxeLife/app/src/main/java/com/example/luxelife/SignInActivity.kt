@@ -92,10 +92,10 @@ class SignInActivity : AppCompatActivity() {
     private fun changingTheme(currentNightMode: Int) {
         if (currentNightMode == Configuration.UI_MODE_NIGHT_NO) {
             // Light mode
-            binding.backgroundSignIn.setBackgroundResource(R.drawable.logindark)
-            binding.textView.setTextColor(ContextCompat.getColor(this, R.color.yellow))
         } else {
             // Dark mode
+            binding.backgroundSignIn.setBackgroundResource(R.drawable.logindark)
+            binding.textView.setTextColor(ContextCompat.getColor(this, R.color.yellow))
         }
     }
 }

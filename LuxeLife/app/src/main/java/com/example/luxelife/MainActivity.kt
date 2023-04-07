@@ -4,22 +4,33 @@ import android.content.Intent
 import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.luxelife.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.coroutines.*
 
-class MainActivity() : AppCompatActivity(), DesignAdapter.OnButtonClickListener {
+class MainActivity() : AppCompatActivity(), DesignAdapter.OnButtonClickListener,DesignAdapter.OnItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var myAdapter: DesignAdapter
 
     override fun onButtonClick(note: String) {
         val fragment = EditFragment()
+        val bundle = Bundle()
+        bundle.putString("note", note)
+        fragment.arguments = bundle
+        supportFragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit()
+    }
+
+
+    override fun onItemClicked(note: String) {
+        val fragment = ViewFragment()
         val bundle = Bundle()
         bundle.putString("note", note)
         fragment.arguments = bundle
@@ -32,11 +43,12 @@ class MainActivity() : AppCompatActivity(), DesignAdapter.OnButtonClickListener 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.searching.postDelayed(
-            {
-                binding.searching.visibility = View.GONE
-            }, 2000
-        )
+        binding.searching.speed = 2f
+//        binding.searching.postDelayed(
+//            {
+//                binding.searching.visibility = View.GONE
+//            }, 2000
+//        )
 //----------------------------------------------------------------------------------------
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -78,11 +90,17 @@ class MainActivity() : AppCompatActivity(), DesignAdapter.OnButtonClickListener 
             myAdapter = databaseReference?.let { DesignAdapter(this@MainActivity) }!!
             myAdapter.loadData(databaseReference, this@MainActivity)
             myAdapter.setOnButtonClickListener(this@MainActivity)
+            myAdapter.setOnItemClickListener(this@MainActivity)
 
             withContext(Dispatchers.Main) {
-                binding.recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
-                binding.recyclerView.adapter = myAdapter
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.searching.visibility = View.GONE
+                    binding.recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+                    binding.recyclerView.adapter = myAdapter
+                },500)
+
             }
         }
     }
+
 }

@@ -18,11 +18,16 @@ class DesignAdapter(c: Context) : RecyclerView.Adapter<DesignAdapter.ViewHolder>
     private lateinit var dbRef: DatabaseReference
     private lateinit var c: Context
     private var buttonClickListener: OnButtonClickListener? = null
+    private var itemClickListener:OnItemClickListener?=null
 
 //--------------------------------------------------------------------------------------------------
 
     fun setOnButtonClickListener(listener: OnButtonClickListener) {
         buttonClickListener = listener
+    }
+
+    fun setOnItemClickListener(listener:OnItemClickListener){
+        itemClickListener = listener
     }
 
     suspend fun loadData(databaseReference: DatabaseReference, context: Context) {
@@ -54,6 +59,7 @@ class DesignAdapter(c: Context) : RecyclerView.Adapter<DesignAdapter.ViewHolder>
         var note: TextView = itemView.findViewById(R.id.edit_Text)
         var delete: ImageView = itemView.findViewById(R.id.delete_note)
         var update: ImageView = itemView.findViewById(R.id.edit_note)
+        var text:TextView =itemView.findViewById(R.id.edit_Text)
 
         @OptIn(DelicateCoroutinesApi::class)
         fun deleteRecord(position: Int) {
@@ -101,6 +107,14 @@ class DesignAdapter(c: Context) : RecyclerView.Adapter<DesignAdapter.ViewHolder>
             buttonClickListener?.onButtonClick(itemList[position].Note)
             holder.deleteRecord(position)
         }
+
+        holder.text.setOnClickListener {
+            itemClickListener?.onItemClicked(itemList[position].Note)
+        }
+    }
+
+    interface OnItemClickListener{
+        fun onItemClicked(note:String)
     }
 
     interface OnButtonClickListener {
