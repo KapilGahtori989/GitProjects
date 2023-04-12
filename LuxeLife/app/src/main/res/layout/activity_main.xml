@@ -4,19 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/entireBackground"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/searching"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="false"
-        app:lottie_rawRes="@raw/animation" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linear_Layout"
@@ -49,18 +39,19 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:descendantFocusability="blocksDescendants"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_Layout"
-        app:layout_constraintVertical_bias="0.5"
-        tools:listitem="@layout/list_design" />
-
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:descendantFocusability="blocksDescendants"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_Layout"
+            app:layout_constraintVertical_bias="0.5"
+            tools:listitem="@layout/list_design"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
     <FrameLayout
         android:id="@+id/frame_layout"

@@ -1,22 +1,23 @@
 package com.example.luxelife
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
-import android.opengl.Visibility
+import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.view.View
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.luxelife.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.coroutines.*
 
-class MainActivity() : AppCompatActivity(), DesignAdapter.OnButtonClickListener,DesignAdapter.OnItemClickListener {
+private var clicked = true//to prevent repopulating of note variable on switching nightMode
+class MainActivity : AppCompatActivity(), DesignAdapter.OnButtonClickListener,DesignAdapter.OnItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var myAdapter: DesignAdapter
 
@@ -37,19 +38,17 @@ class MainActivity() : AppCompatActivity(), DesignAdapter.OnButtonClickListener,
         supportFragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit()
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.searching.speed = 2f
-//        binding.searching.postDelayed(
-//            {
-//                binding.searching.visibility = View.GONE
-//            }, 2000
-//        )
 //----------------------------------------------------------------------------------------
+        val currentNightMode =
+            this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK //->nightModeStatus
+
+        setUiTheme(currentNightMode)
+
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 finishAffinity()
@@ -58,14 +57,23 @@ class MainActivity() : AppCompatActivity(), DesignAdapter.OnButtonClickListener,
         onBackPressedDispatcher.addCallback(this, callback)
 //-----------------------------------------------------------------------------------------
 
+
         binding.logOut.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            val intent = Intent(this, SignInActivity::class.java)
-            startActivity(intent)
-            finish()
+            AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to log out")
+                .setPositiveButton("Yes") { _, _ ->
+                    FirebaseAuth.getInstance().signOut()
+                    val intent = Intent(this, SignInActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                .setNegativeButton("No", null)
+                .show()
         }
 
+
         binding.addNotesImageView.setOnClickListener {
+            clicked = true
             supportFragmentManager.beginTransaction()
                 .add(R.id.frame_layout, BlurredFragment())
                 .addToBackStack(null)
@@ -74,33 +82,42 @@ class MainActivity() : AppCompatActivity(), DesignAdapter.OnButtonClickListener,
 
         val newNote = intent.getStringExtra("newNote")
 
-        GlobalScope.launch(Dispatchers.IO) {
-            val userId = FirebaseAuth.getInstance().currentUser?.uid
-            var databaseReference: DatabaseReference? = null
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        var databaseReference: DatabaseReference? = null
 
-            if (userId != null) {
-                databaseReference =
-                    FirebaseDatabase.getInstance().getReference("users/$userId/list")
-                val id = databaseReference.push().key!!
-                if (newNote != null) {
-                    databaseReference.child(id).setValue(Data(id, newNote))
-                }
-
-            }
-            myAdapter = databaseReference?.let { DesignAdapter(this@MainActivity) }!!
-            myAdapter.loadData(databaseReference, this@MainActivity)
-            myAdapter.setOnButtonClickListener(this@MainActivity)
-            myAdapter.setOnItemClickListener(this@MainActivity)
-
-            withContext(Dispatchers.Main) {
-                Handler(Looper.getMainLooper()).postDelayed({
-                    binding.searching.visibility = View.GONE
-                    binding.recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
-                    binding.recyclerView.adapter = myAdapter
-                },500)
-
+        if (userId != null) {
+            databaseReference =
+                FirebaseDatabase.getInstance().getReference("users/$userId/list")
+            val id = databaseReference.push().key!!
+            if (newNote != null && clicked && newNote != "") {
+                databaseReference.child(id).setValue(Data(id, newNote))
+                clicked = false
             }
         }
+        myAdapter = databaseReference?.let { DesignAdapter() }!!
+        myAdapter.loadData(databaseReference, this@MainActivity)
+        myAdapter.setOnButtonClickListener(this@MainActivity)
+        myAdapter.setOnItemClickListener(this@MainActivity)
+
+        binding.recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+        binding.recyclerView.adapter = myAdapter
+
     }
 
+    @SuppressLint("ObsoleteSdkInt")
+    private fun setUiTheme(currentNightMode: Int) {
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_NO) {
+            // Light mode
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val wic = WindowInsetsControllerCompat(window, window.decorView)
+                wic.isAppearanceLightStatusBars = true // true or false as desired.
+                window.statusBarColor = ContextCompat.getColor(this, R.color.transparent)
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                window.statusBarColor = ContextCompat.getColor(this, R.color.transparent)
+            }
+        } else {
+            // Dark mode
+            window.statusBarColor = ContextCompat.getColor(this, R.color.transparent)
+        }
+    }
 }

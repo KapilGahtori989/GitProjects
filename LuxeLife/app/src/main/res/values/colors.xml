@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name = "yellow">#FFDE59</color>
     <color name = "light">#919090</color>
+    <color name="cardview_border">#808080</color>
+    <color name = "transparent">#00F8F2F2</color>
 </resources>
