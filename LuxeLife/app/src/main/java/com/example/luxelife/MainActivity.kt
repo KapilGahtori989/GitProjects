@@ -22,14 +22,14 @@ class MainActivity : AppCompatActivity(), DesignAdapter.OnButtonClickListener,De
     private lateinit var myAdapter: DesignAdapter
 
     override fun onButtonClick(note: String) {
+        clicked = true
         val fragment = EditFragment()
         val bundle = Bundle()
         bundle.putString("note", note)
         fragment.arguments = bundle
         supportFragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit()
     }
-
-
+    
     override fun onItemClicked(note: String) {
         val fragment = ViewFragment()
         val bundle = Bundle()
