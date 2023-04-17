@@ -19,23 +19,18 @@ import com.google.firebase.database.*
 
 class DesignAdapter : RecyclerView.Adapter<DesignAdapter.ViewHolder>() {
     val itemList: ArrayList<Data> = arrayListOf()
-    private lateinit var dbRef: DatabaseReference
-    private lateinit var c: Context
-    private var buttonClickListener: OnButtonClickListener? = null
     private var itemClickListener: OnItemClickListener? = null
 //--------------------------------------------------------------------------------------------------
-
-    fun setOnButtonClickListener(listener: OnButtonClickListener) {
-        buttonClickListener = listener
-    }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         itemClickListener = listener
     }
 
-     fun loadData(databaseReference: DatabaseReference, context: Context) {
-        dbRef = databaseReference
-        c = context
+     fun loadData( context: Context) {
+         val userId = FirebaseAuth.getInstance().currentUser?.uid
+         val databaseReference =
+             FirebaseDatabase.getInstance().getReference("users/$userId/list")
+
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 itemList.clear()
@@ -61,7 +56,6 @@ class DesignAdapter : RecyclerView.Adapter<DesignAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var note: TextView = itemView.findViewById(R.id.edit_Text)
         var delete: ImageView = itemView.findViewById(R.id.delete_note)
-        var update: ImageView = itemView.findViewById(R.id.edit_note)
         var text: TextView = itemView.findViewById(R.id.edit_Text)
         var view:ConstraintLayout = itemView.findViewById(R.id.view)
         var scrollView:ScrollView = itemView.findViewById(R.id.scroll_View)
@@ -108,10 +102,10 @@ class DesignAdapter : RecyclerView.Adapter<DesignAdapter.ViewHolder>() {
         // Check if night mode is enabled
         val isNightModeEnabled = holder.isNightModeEnabled(holder.itemView.context)
         if (isNightModeEnabled) {
-            holder.note.setTextColor(Color.WHITE)
+            holder.note.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.grey))
             holder.delete.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context,R.drawable.baseline_delete_24_white))
-            holder.update.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context,R.drawable.baseline_edit_24_white))
         } else {
+            holder.note.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.lightblack))
             holder.scrollView.setBackgroundResource(R.drawable.cardview_background_white)
         }
 
@@ -126,22 +120,14 @@ class DesignAdapter : RecyclerView.Adapter<DesignAdapter.ViewHolder>() {
                 .show()
         }
 
-        holder.update.setOnClickListener {
-            buttonClickListener?.onButtonClick(itemList[position].Note)
-            holder.deleteRecord(position)
-        }
-
         holder.view.setOnClickListener {
-            itemClickListener?.onItemClicked(itemList[position].Note)
+            itemClickListener?.onItemClicked(itemList[position].Note,itemList[position].Id)
         }
     }
 
     interface OnItemClickListener {
-        fun onItemClicked(note: String)
+        fun onItemClicked(note: String,key:String)
     }
 
-    interface OnButtonClickListener {
-        fun onButtonClick(note: String)
-    }
 }
 

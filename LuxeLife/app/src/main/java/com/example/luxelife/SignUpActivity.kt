@@ -3,6 +3,7 @@ package com.example.luxelife
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -12,6 +13,8 @@ import com.google.firebase.auth.FirebaseAuth
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
     private lateinit var firebaseAuth: FirebaseAuth
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
@@ -29,10 +32,12 @@ class SignUpActivity : AppCompatActivity() {
 
             if (email.isNotEmpty() && pass.isNotEmpty() && confirmPass.isNotEmpty()) {
                 if (pass == confirmPass) {
+                    showProgressBar()
                     firebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
                         if (it.isSuccessful) {
                             val intent = Intent(this, SignInActivity::class.java)
                             startActivity(intent)
+                            hideProgressBar()
                         } else {
                             val errorMessage = it.exception.toString()
 
@@ -64,6 +69,7 @@ class SignUpActivity : AppCompatActivity() {
                                         .show()
                                 }
                             }
+                            hideProgressBar()
                         }
                     }
                 } else {
@@ -93,5 +99,14 @@ class SignUpActivity : AppCompatActivity() {
             binding.backgroundRegister.setBackgroundResource(R.drawable.registerdark)
             binding.textView.setTextColor(ContextCompat.getColor(this, R.color.yellow))
         }
+    }
+
+    private fun showProgressBar() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    // Hide the ProgressBar
+    private fun hideProgressBar() {
+        binding.progressBar.visibility = View.GONE
     }
 }

@@ -6,42 +6,34 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.luxelife.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.coroutines.*
 
-private var clicked = true//to prevent repopulating of note variable on switching nightMode
-class MainActivity : AppCompatActivity(), DesignAdapter.OnButtonClickListener,DesignAdapter.OnItemClickListener {
+class MainActivity : AppCompatActivity(), DesignAdapter.OnItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var myAdapter: DesignAdapter
 
-    override fun onButtonClick(note: String) {
-        clicked = true
-        val fragment = EditFragment()
-        val bundle = Bundle()
-        bundle.putString("note", note)
-        fragment.arguments = bundle
-        supportFragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit()
-    }
-    
-    override fun onItemClicked(note: String) {
-        val fragment = ViewFragment()
-        val bundle = Bundle()
-        bundle.putString("note", note)
-        fragment.arguments = bundle
-        supportFragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit()
+    override fun onItemClicked(note: String, key: String) {
+        val intent = Intent(this, NoteView::class.java)
+        intent.putExtra("originalNote", note)
+        intent.putExtra("id", key)
+        startActivity(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        showProgressBar()
 
 //----------------------------------------------------------------------------------------
         val currentNightMode =
@@ -73,35 +65,26 @@ class MainActivity : AppCompatActivity(), DesignAdapter.OnButtonClickListener,De
 
 
         binding.addNotesImageView.setOnClickListener {
-            clicked = true
-            supportFragmentManager.beginTransaction()
-                .add(R.id.frame_layout, BlurredFragment())
-                .addToBackStack(null)
-                .commit()
+            val intent = Intent(this, AddNotes::class.java)
+            startActivity(intent)
         }
 
-        val newNote = intent.getStringExtra("newNote")
-
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-        var databaseReference: DatabaseReference? = null
-
-        if (userId != null) {
-            databaseReference =
-                FirebaseDatabase.getInstance().getReference("users/$userId/list")
-            val id = databaseReference.push().key!!
-            if (newNote != null && clicked && newNote != "") {
-                databaseReference.child(id).setValue(Data(id, newNote))
-                clicked = false
-            }
-        }
-        myAdapter = databaseReference?.let { DesignAdapter() }!!
-        myAdapter.loadData(databaseReference, this@MainActivity)
-        myAdapter.setOnButtonClickListener(this@MainActivity)
+        myAdapter = DesignAdapter()
+        myAdapter.loadData(this@MainActivity)
         myAdapter.setOnItemClickListener(this@MainActivity)
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
         binding.recyclerView.adapter = myAdapter
 
+        //-----------------------------------------------------------------------------------------
+        // Hide progress bar after adapter has finished loading data
+        myAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onChanged() {
+                super.onChanged()
+                hideProgressBar()
+            }
+        })
+        //-----------------------------------------------------------------------------------------
     }
 
     @SuppressLint("ObsoleteSdkInt")
@@ -112,12 +95,23 @@ class MainActivity : AppCompatActivity(), DesignAdapter.OnButtonClickListener,De
                 val wic = WindowInsetsControllerCompat(window, window.decorView)
                 wic.isAppearanceLightStatusBars = true // true or false as desired.
                 window.statusBarColor = ContextCompat.getColor(this, R.color.transparent)
+
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 window.statusBarColor = ContextCompat.getColor(this, R.color.transparent)
             }
         } else {
             // Dark mode
             window.statusBarColor = ContextCompat.getColor(this, R.color.transparent)
+
         }
+    }
+
+    private fun showProgressBar() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    // Hide the ProgressBar
+    private fun hideProgressBar() {
+        binding.progressBar.visibility = View.GONE
     }
 }

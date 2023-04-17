@@ -4,7 +4,8 @@
     <string name="type_the_password">Type the Password</string>
     <string name="confirm_your_password">Confirm your Password</string>
     <string name="sign_up">Sign In</string>
-    <string name = "register">Register</string>
+    <string name="register">Register</string>
     <string name="already_registered_sign_in">Already Registered, Sign In !…</string>
     <string name="not_registered_yet_sign_up">Not Registered Yet, Sign Up!…</string>
+    <string name="write_text_here">Write Text Here</string>
 </resources>
