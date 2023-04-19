@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LuxeLife</string>
+    <string name="app_name">NoteMaster</string>
     <string name="type_your_email">Type your Email ex:avatar@gmail.com</string>
     <string name="type_the_password">Type the Password</string>
     <string name="confirm_your_password">Confirm your Password</string>
