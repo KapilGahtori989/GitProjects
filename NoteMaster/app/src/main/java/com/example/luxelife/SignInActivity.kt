@@ -43,7 +43,6 @@ class SignInActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
         binding.textView.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
@@ -55,7 +54,6 @@ class SignInActivity : AppCompatActivity() {
             val pass = binding.PasswordEt.text.toString()
 
             if (email.isNotEmpty() && pass.isNotEmpty()) {
-
                 firebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
                     if (it.isSuccessful) {
                         val intent = Intent(this, MainActivity::class.java)
