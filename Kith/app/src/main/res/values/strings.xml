@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Kith</string>
+    <string name="signUpHeading">Here\'s \nyour first \nstep with us!</string>
+    <string name="signInHeading">Already \nhave an \nAccount?</string>
+    <string name="new_user_register_now">New User?Register Now</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="log_in">Log In</string>
+    <string name="use_other_methods">Use Other Methods</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="register">Register</string>
+    <string name="already_registered_log_in">Already Registered? Log In</string>
+    <string name="log_out">Log Out</string>
+    <string name="type_a_message">Type a message</string>
+</resources>
