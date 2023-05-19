@@ -44,6 +44,7 @@ class SignInActivity : AppCompatActivity() {
             finish()
         }
         binding.textView.setOnClickListener {
+            //if not signed in yet
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
