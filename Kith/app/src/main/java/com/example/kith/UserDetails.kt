@@ -13,8 +13,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 class UserDetails : AppCompatActivity() {
-    private lateinit var binding:ActivityUserDetailsBinding
-    private lateinit var dbRef:DatabaseReference
+    private lateinit var binding: ActivityUserDetailsBinding
+    private lateinit var dbRef: DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserDetailsBinding.inflate(layoutInflater)
@@ -26,11 +26,11 @@ class UserDetails : AppCompatActivity() {
             val email = intent.getStringExtra("email")
             val uid = intent.getStringExtra("uid")
             var name = binding.userNameUserDetails.text.toString()
-            if(name==""){
+            if (name == "") {
                 name = email!!
             }
-            addUserToDatabase(name,email,uid)
-            val intent = Intent(this,SignInActivity::class.java)
+            addUserToDatabase(name, email, uid)
+            val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -38,7 +38,7 @@ class UserDetails : AppCompatActivity() {
 
     private fun addUserToDatabase(name: String, email: String?, uid: String?) {
         dbRef = FirebaseDatabase.getInstance().reference
-        dbRef.child("user").child(uid!!).setValue(User(name,email, uid))
+        dbRef.child("user").child(uid!!).setValue(User(name, email, uid))
     }
 
     @SuppressLint("ObsoleteSdkInt")

@@ -81,11 +81,14 @@ class ChatActivity : AppCompatActivity() {
             val message = binding.messageBox.text.toString()
             val messageObject = Message(message, senderUid)
 
-            mDBRef.child("chats").child(senderRoom!!).child("messages").push()
-                .setValue(messageObject).addOnSuccessListener {
-                    mDBRef.child("chats").child(receiverRoom!!).child("messages").push()
-                        .setValue(messageObject)
-                }
+            if(message.isNotBlank()){
+                mDBRef.child("chats").child(senderRoom!!).child("messages").push()
+                    .setValue(messageObject).addOnSuccessListener {
+                        mDBRef.child("chats").child(receiverRoom!!).child("messages").push()
+                            .setValue(messageObject)
+                    }
+            }
+
             binding.messageBox.setText("")
         }
 
